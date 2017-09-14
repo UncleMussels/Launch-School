@@ -16,7 +16,6 @@ def operation_to_message(op)
   message
 end
 
-
 prompt("Welcome to my calculator! State your name: ")
 
 name = ''
@@ -35,7 +34,7 @@ prompt("Hello, #{name}!")
 loop do # outer loop
   number1 = ''
 
-  loop do 
+  loop do
     prompt("What's the first number?")
     number1 = Kernel.gets().chomp()
 
@@ -58,19 +57,19 @@ loop do # outer loop
       prompt("Please enter a valid number")
     end
   end
- 
+
   operation_prompt = <<-MSG
     What operation do you want to perform?
-    1) add 
-    2) subtract 
-    3) multiply 
+    1) add
+    2) subtract
+    3) multiply
     4) divide
   MSG
 
   prompt(operation_prompt)
 
   operation = ''
-  loop do 
+  loop do
     operation = Kernel.gets().chomp()
 
     if %w(1 2 3 4).include?(operation)
@@ -87,7 +86,7 @@ loop do # outer loop
            when '2' then number1.to_i() - number2.to_i()
            when '3' then number1.to_i() * number2.to_i()
            when '4' then number1.to_f() / number2.to_f()
-  end
+           end
 
   prompt("The result is #{result}")
 

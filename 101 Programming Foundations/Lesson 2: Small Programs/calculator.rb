@@ -49,7 +49,7 @@ loop do # outer loop
   loop do
     prompt(messages('first_number_prompt'))
     number1 = Kernel.gets().chomp()
-    
+
     break if number?(number1)
     prompt(messages('valid_number'))
   end

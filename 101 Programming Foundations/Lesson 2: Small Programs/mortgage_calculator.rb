@@ -1,4 +1,5 @@
-require "pry"
+require 'yaml'
+MESSAGES = YAML.load_file('mortgage_messages.yml')
 
 def prompt(message)
   puts "=> #{message}"
@@ -18,40 +19,29 @@ def input_loop(figure)
     return response if figure == 'annual' && valid_number?(response)
     return response if integer?(response)
 
-    prompt(errors(figure))
+    prompt(MESSAGES['errors'][figure])
   end
 end
 
-def errors(figure)
-  case
-  when 'amount' then "That doesn't seem like a whole number..."
-  when 'annual' then "The APR can only include numbers and a decimal."
-  when 'years'  then "I don't think years work that way..."
-  end
-end
-
-prompt("You have a mortgage and I'm a calculator. Let's crunch some numbers!")
+prompt(MESSAGES['welcome'])
 
 loop do
-  prompt("Enter your loan amount rounded to the nearest dollar:")
+  prompt(MESSAGES['amount'])
   loan_amount = input_loop('amount')
 
-  prompt("What's the Annual Percentage Rate (APR)?")
+  prompt(MESSAGES['annual'])
   apr = input_loop('annual')
+  mpr = (apr.to_f / 100) / 12
 
-  prompt("What is the length of the loan in years?")
-  loan_years = input_loop('years')
+  prompt(MESSAGES['years'])
+  loan_year = input_loop('years')
+  loan_month = loan_year.to_i * 12
 
-  prompt("Very good! Calculating your information...")
+  payment = (loan_amount.to_i * (mpr / (1 - (1 + mpr)**-loan_month))).round(2)
 
-  monthly_percentage_rate = (apr.to_f * 0.01) / 12
-  loan_months             = loan_years.to_f * 12
-  monthly_payment         = loan_amount.to_i * (monthly_percentage_rate / (1 - (1 + monthly_percentage_rate)**(-loan_months)))
+  prompt(MESSAGES['results'].sub('XX', payment.to_s).sub('YY', loan_month.to_s))
 
-  prompt("With a monthly interest rate of #{(monthly_percentage_rate * 100).round(2)}%, " +
-         "you'll pay $#{monthly_payment.round(2)} for #{loan_months.round} months!")
-  
-  prompt("Want to calculate again? Enter 'y' to start over")
+  prompt(MESSAGES['again'])
   answer = gets.chomp
   break unless answer.downcase == 'y'
 end

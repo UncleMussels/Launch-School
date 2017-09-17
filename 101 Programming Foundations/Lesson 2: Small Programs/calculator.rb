@@ -1,7 +1,7 @@
 require 'yaml'
 MESSAGES = YAML.load_file('calc_messages.yml')
 
-def messages(message, language='spanish')
+def messages(message, language='english')
   MESSAGES[language][message]
 end
 
@@ -37,11 +37,8 @@ name = ''
 loop do
   name = Kernel.gets().chomp()
 
-  if name.empty?()
-    prompt(messages('valid_name'))
-  else
-    break
-  end
+  break unless name.strip.empty?()
+  prompt(messages('valid_name'))
 end
 
 prompt(messages('hello_name') + "#{name}!")
@@ -52,12 +49,9 @@ loop do # outer loop
   loop do
     prompt(messages('first_number_prompt'))
     number1 = Kernel.gets().chomp()
-
-    if number?(number1)
-      break
-    else
-      prompt(messages('valid_number'))
-    end
+    
+    break if number?(number1)
+    prompt(messages('valid_number'))
   end
 
   number2 = ''
@@ -66,11 +60,8 @@ loop do # outer loop
     prompt(messages('second_number_prompt'))
     number2 = Kernel.gets().chomp()
 
-    if number?(number2)
-      break
-    else
-      prompt(messages('valid_number'))
-    end
+    break if number?(number2)
+    prompt(messages('valid_number'))
   end
 
   prompt(messages('operation_prompt'))
@@ -79,11 +70,8 @@ loop do # outer loop
   loop do
     operation = Kernel.gets().chomp()
 
-    if %w(1 2 3 4).include?(operation)
-      break
-    else
-      prompt(messages('operation_choice'))
-    end
+    break if %w(1 2 3 4).include?(operation)
+    prompt(messages('operation_choice'))
   end
 
   prompt(messages(operation_to_message(operation)))
@@ -95,7 +83,7 @@ loop do # outer loop
            when '4' then number1.to_f() / number2.to_f()
            end
 
-  prompt(messages('result') + "#{result}")
+  prompt(messages('result') + result.to_s)
 
   prompt(messages('calculate_loop'))
   answer = Kernel.gets().chomp()

@@ -32,22 +32,26 @@ end
 
 prompt("You have a mortgage and I'm a calculator. Let's crunch some numbers!")
 
-prompt("Enter your loan amount rounded to the nearest dollar:")
-loan_amount = input_loop('amount')
+loop do
+  prompt("Enter your loan amount rounded to the nearest dollar:")
+  loan_amount = input_loop('amount')
 
-prompt("What's the Annual Percentage Rate (APR)?")
-apr = input_loop('annual')
+  prompt("What's the Annual Percentage Rate (APR)?")
+  apr = input_loop('annual')
 
-prompt("What is the length of the loan in years?")
-loan_years = input_loop('years')
+  prompt("What is the length of the loan in years?")
+  loan_years = input_loop('years')
 
-prompt("Very good! Calculating your information...")
+  prompt("Very good! Calculating your information...")
 
-monthly_percentage_rate = (apr.to_f * 0.01) / 12
-p monthly_percentage_rate
-loan_months = loan_years.to_f * 12
-monthly_payment = loan_amount.to_i * (monthly_percentage_rate / (1 - (1 + monthly_percentage_rate)**(-loan_months)))
+  monthly_percentage_rate = (apr.to_f * 0.01) / 12
+  loan_months             = loan_years.to_f * 12
+  monthly_payment         = loan_amount.to_i * (monthly_percentage_rate / (1 - (1 + monthly_percentage_rate)**(-loan_months)))
 
-prompt("With a monthly interest rate of #{(monthly_percentage_rate * 100).round(2)}%, you'll pay $#{monthly_payment.round(2)} for #{loan_months.round} months!")
-
-# ask user if they want to calculate again
+  prompt("With a monthly interest rate of #{(monthly_percentage_rate * 100).round(2)}%, " +
+         "you'll pay $#{monthly_payment.round(2)} for #{loan_months.round} months!")
+  
+  prompt("Want to calculate again? Enter 'y' to start over")
+  answer = gets.chomp
+  break unless answer.downcase == 'y'
+end

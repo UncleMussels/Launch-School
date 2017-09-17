@@ -1,0 +1,16 @@
+# configuration file for mortgage_calculator.rb messages
+
+welcome: "You have a mortgage and I'm a calculator. Let's crunch some numbers!"
+amount: "Enter your loan amount rounded to the nearest dollar:"
+annual: "What's the Annual Percentage Rate (APR)?"
+years: "What is the length of the loan in years?"
+results: "Aw, bummer! Looks like you'll pay $XX per month for YY months!"
+again: "Want to calculate again? Enter 'y' to start over"
+errors: 
+  amount: "That doesn't seem like a whole number..."
+  annual: "The APR can only include numbers separated by a decimal."
+  years: "I don't think years work that way..."
+
+
+# "With a monthly interest rate of #{(mpr * 100).round(2)}%, " +
+#         "you'll pay $#{payment.round(2)} per month for #{loan_months.round} months!"

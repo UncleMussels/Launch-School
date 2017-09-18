@@ -27,9 +27,8 @@ def input_loop(figure)
   end
 end
 
-prompt(MESSAGES['welcome'])
-
 loop do
+  prompt(MESSAGES['welcome'])
   prompt(MESSAGES['amount'])
   loan_amount = input_loop('amount')
 
@@ -48,6 +47,7 @@ loop do
   prompt(MESSAGES['again'])
   answer = gets.chomp
   break unless answer.downcase == 'y'
+  system('clear') || system('cls')
 end
 
 prompt(MESSAGES['exit'])

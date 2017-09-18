@@ -45,3 +45,5 @@ loop do
   answer = gets.chomp
   break unless answer.downcase == 'y'
 end
+
+prompt(MESSAGES['exit'])

@@ -6,6 +6,7 @@ annual: "What's the Annual Percentage Rate (APR)?"
 years: "What is the length of the loan in years?"
 results: "Aw, bummer! Looks like you'll pay $XX per month for YY months!"
 again: "Want to calculate again? Enter 'y' to start over"
+exit: "So long, and good luck making payments!"
 errors: 
   amount: "That doesn't seem like a whole number..."
   annual: "The APR can only include numbers separated by a decimal."

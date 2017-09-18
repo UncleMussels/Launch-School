@@ -5,15 +5,23 @@ def prompt(message)
   puts "=> #{message}"
 end
 
-def valid_number?(num, figure)
-  (figure.match(/amount|years|/) && num.to_i.to_s == num) ||
-  figure == 'annual' && num.to_f.to_s == num
+def number?(num)
+  integer?(num) || float?(num)
+end
+
+def integer?(num)
+  num.to_i.to_s == num
+end
+
+def float?(num)
+  num.to_f.to_s == num
 end
 
 def input_loop(figure)
   loop do
-    response = gets.chomp
-    return response if valid_number?(response, figure)
+    num = gets.chomp
+    return num if figure.match(/amount|years|/) && integer?(num)
+    return num if figure == 'annual' && number?(num)
 
     prompt(MESSAGES['errors'][figure])
   end

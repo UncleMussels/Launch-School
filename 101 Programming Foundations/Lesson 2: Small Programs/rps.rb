@@ -52,11 +52,8 @@ loop do
     puts "You chose #{choice.upcase}; " \
          "opponent chose #{cpu_choice.upcase}... #{result}"
 
-    if result.start_with?('You')
-      player_wins += 1
-    elsif result.start_with?('Opponent')
-      cpu_wins += 1
-    end
+    player_wins += 1 if result.start_with?('You')
+    cpu_wins += 1 if result.start_with?('Opponent')
   end
 
   print_winner(player_wins, cpu_wins)

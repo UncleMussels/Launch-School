@@ -6,7 +6,17 @@ def prompt(message)
   puts "=> #{message}"
 end
 
-def print_winner(player, cpu)
+def who_wins(choice, cpu_choice, player_won)
+  if player_won
+    "You win!"
+  elsif choice == cpu_choice
+    "It's a draw!"
+  else
+    "Opponent wins!"
+  end
+end
+
+def print_final_winner(player, cpu)
   if player == 5
     prompt("You won, #{player} to #{cpu}! Press 'y' to play again")
   else
@@ -41,13 +51,8 @@ loop do
 
     cpu_choice = WEAPON_CHOICES.sample
 
-    result = if winning_moves[choice.to_s].include?(cpu_choice.to_s)
-               "You win!"
-             elsif choice == cpu_choice
-               "It's a draw!"
-             else
-               "Opponent wins!"
-             end
+    player_won = winning_moves[choice.to_sym].include?(cpu_choice)
+    result = who_wins(choice, cpu_choice, player_won)
 
     puts "You chose #{choice.upcase}; " \
          "opponent chose #{cpu_choice.upcase}... #{result}"
@@ -56,7 +61,7 @@ loop do
     cpu_wins += 1 if result.start_with?('Opponent')
   end
 
-  print_winner(player_wins, cpu_wins)
+  print_final_winner(player_wins, cpu_wins)
   break unless gets.chomp.downcase.start_with?('y')
 end
 

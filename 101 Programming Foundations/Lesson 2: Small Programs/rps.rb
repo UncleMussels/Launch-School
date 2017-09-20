@@ -1,6 +1,6 @@
 # Simple rock, paper, scissors game vs. cpu
 
-WEAPON_CHOICES = ['rock', 'paper', 'scissors']
+WEAPON_CHOICES = %w(rock paper scissors)
 
 def prompt(message)
   puts "=> #{message}"
@@ -19,12 +19,12 @@ def display_results(player, opponent)
 end
 
 loop do
-  choice = ''
   prompt("Choose your weapon: #{WEAPON_CHOICES.join(', ')}")
+
+  choice = ''
   loop do
     choice = gets.chomp.downcase
     break if WEAPON_CHOICES.include?(choice)
-
     prompt("You must choose a weapon to play: #{WEAPON_CHOICES.join(' or ')}")
   end
 

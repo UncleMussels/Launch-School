@@ -10,10 +10,6 @@ def prompt(message)
 end
 
 def show_board(board_spaces)
-  build_rows board_spaces
-end
-
-def build_rows(board_spaces)
   index  = 0
   ends   = "+-------+-------+-------+"
   sides  = "|       +       +       |"
@@ -110,13 +106,11 @@ loop do
       break if !check_board(board_spaces).nil?
     end
 
-    if check_board(board_spaces) == "Computer wins!"
-      puts check_board board_spaces
-    else
-      show_board board_spaces
-      puts check_board board_spaces
+    if check_board(board_spaces) != "Computer wins!"
+      show_board(board_spaces)
     end
 
+    puts check_board board_spaces
     break
   end
 

@@ -8,24 +8,33 @@ def prompt(message)
 end
 
 def deal_cards(deck, hands)
-  2.times { hit(deck, hands, :gambler) } # deal user hand
-  2.times { hit(deck, hands, :dealer) } # deal dealer hand
+  2.times { hit(deck, hands, :gambler) }
+  2.times { hit(deck, hands, :dealer) }
 end
 
 def hit(deck, hands, player)
   suit  = deck.keys.sample
   value = deck[suit].sample
   deck[suit].delete(value)
-  hands[player] << [suit, value] # add card to player hand
+  hands[player] << [suit, value]
 end
 
 def show_cards(hands, hide=true) # call (hands, false) to show last dealer card
-  hands.each do |player, cards| # iterate through each player hand
+  hands.each do |player, cards|
     hand = []
-    cards.each { |card| hand << card[1] } # add card value to player hand
+    cards.each { |card| hand << card[1] }
     hand[-1] = '???' if player == :dealer && hide # hide dealers last card
 
     puts "#{player.capitalize} has: #{hand.join(', ')}"
+  end
+end
+
+def user_turn(gambler_score)
+  prompt "Your score is #{gambler_score}. Hit or stay?: "
+  loop do
+    answer = gets.chomp.downcase
+    return answer if ['hit', 'stay'].include?(answer)
+    prompt "You must enter 'hit' or 'stay': "
   end
 end
 
@@ -37,13 +46,13 @@ def calculate_scores(hands, player)
   score = 0
 
   hands[player].each do |card|
-    if card[1] == 'Ace'
-      score += 11
-    elsif card[1].to_i == 0 # Jack, Queen, King
-      score += 10
-    else                    # Cards 2..10
-      score += card[1].to_i
-    end
+    score += if card[1] == "Ace"
+               11
+             elsif card[1].to_i == 0
+               10
+             else
+               card[1].to_i
+             end
   end
 
   hands[player].select { |card| card[1] == "Ace" }.count.times do
@@ -84,20 +93,20 @@ def display_result(gambler_score, dealer_score)
   end
 end
 
-def track_score(gambler_score, dealer_score, game_score)
+def increment_game_score(gambler_score, dealer_score, game_score)
   result = game_result(gambler_score, dealer_score)
 
   if [:gambler, :dealer_busted].include?(result)
-    then game_score[:gambler] += 1
+    game_score[:gambler] += 1
   elsif [:dealer, :gambler_busted].include?(result)
-    then game_score[:dealer] += 1
+    game_score[:dealer] += 1
   end
 end
 
 def play_again?
-  print "Do you want to play again? (y or n): "
+  print "Press 'y' to play again: "
   answer = gets.chomp
-  answer.downcase.start_with?('y')
+  answer.downcase == 'y'
 end
 
 def divide_screen
@@ -125,31 +134,28 @@ loop do
     gambler_score = nil
     dealer_score = nil
 
-    loop do # game begins
+    loop do
       puts "Game score is #{game_score[:gambler]} - #{game_score[:dealer]}"
       divide_screen
 
       deal_cards(deck, hands)
       show_cards(hands)
+
       gambler_score = calculate_scores(hands, :gambler)
       dealer_score = calculate_scores(hands, :dealer)
 
       loop do
         break if gambler_score == POINTS_TO_WIN
+        decision = user_turn(gambler_score)
 
-        prompt "Your score is #{gambler_score}. Hit or stay?: "
-        answer = gets.chomp.downcase
-
-        if answer == 'hit'
-          hit(deck, hands, :gambler)
+        if decision == 'hit'
           divide_screen
+          hit(deck, hands, :gambler)
           show_cards(hands)
           gambler_score = calculate_scores(hands, :gambler)
           break if busted?(gambler_score)
-        elsif answer == 'stay'
-          break
         else
-          puts "You must enter 'hit' or 'stay'!"
+          break
         end
       end
 
@@ -157,7 +163,7 @@ loop do
         break
       elsif gambler_score == POINTS_TO_WIN
         prompt "You've got #{POINTS_TO_WIN}! Press enter to start dealer turn:"
-        gets.chomp
+        gets
       end
 
       divide_screen
@@ -169,7 +175,7 @@ loop do
         if dealer_hit?(dealer_score, gambler_score)
           prompt "Dealer score is #{dealer_score}. Dealer will hit." \
                  " Press enter to continue: "
-          gets.chomp
+          gets
 
           hit(deck, hands, :dealer)
           divide_screen
@@ -185,9 +191,9 @@ loop do
 
     prompt display_result(gambler_score, dealer_score)
     print "Press enter to continue: "
-    gets.chomp
+    gets
 
-    track_score(gambler_score, dealer_score, game_score)
+    increment_game_score(gambler_score, dealer_score, game_score)
     break if game_score.any? { |__, score| score == 5 }
     clear_screen
   end
